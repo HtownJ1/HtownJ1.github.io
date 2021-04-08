@@ -1,117 +1,25 @@
-html {
-  height: 30%;
-}
-body {
+html, body, .stage, .ring, .img {
+  width:100%;
   height: 100%;
-  background: #cae0e6;
-  display: grid;
-  place-items: center;
+  transform-style: preserve-3d;
+  user-select:none;
 }
 
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 600px;
-  height: 200px;
+html, body, .stage {
+  overflow:hidden;
+  background:#000;
+  
 }
 
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
+div, svg {
   position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 100px;
-  background-image: linear-gradient(
-    #ffdccb,
-    #ffb987,
-    #ffb16e,
-    #ffc47c,
-    #fff1aa
-  );
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
 }
 
-.crib {
-  position: absolute;
-  left: -11px;
-  bottom: 6px;
-  transition: 0.4s;
-  z-index: 100;
-  overflow: hidden;
-}
-
-svg {
-  height: 180px;
-  width: 210px;
-}
-#Crib {
-  transform-origin: center;
-}
-
-#Left,
-#Right {
-  transform-origin: center;
-  transition: 0.5s ease-in-out;
-}
-
-input:checked + .slider .crib {
-  transform: translateX(410px);
-}
-input:checked + .slider .crib .right {
-  transform: rotate(90deg) translate(60px);
-}
-input:checked + .slider .crib #Left {
-  transform: rotate(-90deg) translate(-70px) scale(0.8);
-}
-input:checked + .slider .crib #Right {
-  transform: rotate(90deg) translate(70px) scale(0.8);
-}
-
-#Grogu {
-  transform-origin: center;
-  transition: 0.8s ease-in-out;
-  transition-delay: 0.2s;
-  transform: translatey(51px) scale(0);
-  filter: brightness(130%);
-}
-#Robe {
-  transform-origin: center;
-  transition: 0.8s ease-in-out;
-  transition-delay: 0s;
-  transform: translatey(51px) scale(0);
-}
-
-input:checked + .slider .crib #Robe {
-  transform: translatey(0px) scale(1);
-}
-
-input:checked + .slider .crib #Grogu {
-  transform: translatey(10px) scale(1);
-  animation: head-tilt 3s ease-in-out;
-  animation-delay: 1s;
-}
-
-@keyframes head-tilt {
-  0% {
-    transform: translatey(10px) scale(1);
-  }
-  25% {
-    transform: rotate(-3deg) translatey(0px);
-  }
-
-  75% {
-    transform: rotate(3deg) translatey(0px);
-  }
-  100% {
-    transform: rotate(0deg) translatey(10px);
-  }
+.container {
+  perspective: 2000px;
+  width: 300px;
+  height: 400px;  
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
 }
