@@ -1,62 +1,59 @@
-let xPos = 0;
+var myhour, myminute, mysecond;
 
-gsap.timeline()
-    .set('.ring', { rotationY:180, cursor:'grab' }) //set initial rotationY so the parallax jump happens off screen
-    .set('.img',  { // apply transform rotations to each image
-      rotateY: (i)=> i*-36,
-      transformOrigin: '50% 50% 500px',
-      z: -500,
-      backgroundImage:(i)=>'url(https://picsum.photos/id/'+(i+32)+'/600/400/)',
-      backgroundPosition:(i)=>getBgPos(i),
-      backfaceVisibility:'hidden'
-    })    
-    .from('.img', {
-      duration:1.5,
-      y:200,
-      opacity:0,
-      stagger:0.1,
-      ease:'expo'
-    })
-    .add(()=>{
-      $('.img').on('mouseenter', (e)=>{
-        let current = e.currentTarget;
-        gsap.to('.img', {opacity:(i,t)=>(t==current)? 1:0.5, ease:'power3'})
-      })
-      $('.img').on('mouseleave', (e)=>{
-        gsap.to('.img', {opacity:1, ease:'power2.inOut'})
-      })
-    }, '-=0.5')
-
-$(window).on('mousedown touchstart', dragStart);
-$(window).on('mouseup touchend', dragEnd);
-      
-
-function dragStart(e){ 
-  if (e.touches) e.clientX = e.touches[0].clientX;
-  xPos = Math.round(e.clientX);
-  gsap.set('.ring', {cursor:'grabbing'})
-  $(window).on('mousemove touchmove', drag);
+function flipNumber(el, newnumber) {
+  var thistop = el.find(".top").clone();
+  var thisbottom = el.find(".bottom").clone();
+  thistop.addClass("new");
+  thisbottom.addClass("new");
+  thisbottom.find(".text").text(newnumber);
+  el.find(".top").after(thistop);
+  el.find(".top.new").append(thisbottom);
+  el.addClass("flipping");
+  el.find(".top:not(.new)").find(".text").text(newnumber);
+  setTimeout(function () {
+    el.find(".bottom:not(.new)").find(".text").text(newnumber);
+  }, 500);
+}
+function setTime() {
+  $(".flipper").removeClass("flipping");
+  $(".flipper .new").remove();
+  var date = new Date();
+  var seconds = date.getSeconds().toString();
+  if (seconds.length == 1) {
+    seconds = "0" + seconds;
+  }
+  var minutes = date.getMinutes().toString();
+  if (minutes.length == 1) {
+    minutes = "0" + minutes;
+  }
+  var hour = date.getHours();
+  if (hour > 12) {
+    hour = hour - 12;
+  }
+  if (hour == 0) {
+    hour = 12;
+  }
+  hour = hour.toString();
+  if (hour.length == 1) {
+    hour = "0" + hour;
+  }
+  if ($(myhour[0]).text() !== hour) {
+    flipNumber($(myhour[0]).closest(".flipper"), hour);
+  }
+  if ($(myminute[0]).text() !== minutes) {
+    flipNumber($(myminute[0]).closest(".flipper"), minutes);
+  }
+  if ($(mysecond[0]).text() !== seconds) {
+    flipNumber($(mysecond[0]).closest(".flipper"), seconds);
+  }
+  setTimeout(function () {
+    setTime();
+  }, 500);
 }
 
-
-function drag(e){
-  if (e.touches) e.clientX = e.touches[0].clientX;    
-
-  gsap.to('.ring', {
-    rotationY: '-=' +( (Math.round(e.clientX)-xPos)%360 ),
-    onUpdate:()=>{ gsap.set('.img', { backgroundPosition:(i)=>getBgPos(i) }) }
-  });
-  
-  xPos = Math.round(e.clientX);
-}
-
-
-function dragEnd(e){
-  $(window).off('mousemove touchmove', drag);
-  gsap.set('.ring', {cursor:'grab'});
-}
-
-
-function getBgPos(i){ //returns the background-position string to create parallax movement in each image
-  return ( 100-gsap.utils.wrap(0,360,gsap.getProperty('.ring', 'rotationY')-180-i*36)/360*500 )+'px 0px';
-}
+$(function () {
+  myhour = $(".clock .flipper:nth-child(1) div:not(.new) .text");
+  myminute = $(".clock .flipper:nth-child(2) div:not(.new) .text");
+  mysecond = $(".clock .flipper:nth-child(3) div:not(.new) .text");
+  setTime();
+});
