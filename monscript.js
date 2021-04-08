@@ -56,4 +56,4 @@ function flipper () {
   myminute = $(".clock .flipper:nth-child(2) div:not(.new) .text");
   mysecond = $(".clock .flipper:nth-child(3) div:not(.new) .text");
   setTime();
-});
+}
